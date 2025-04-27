@@ -38,7 +38,7 @@ export default function LoginPage() {
     },
   })
 
-  // Modify the login flow to not automatically redirect to the dashboard
+  // Modified login flow to redirect based on user role
   async function onSubmit(data: LoginFormValues) {
     setIsLoading(true)
     try {
@@ -55,8 +55,17 @@ export default function LoginPage() {
       if (redirectTo) {
         router.push(redirectTo)
       } else {
-        // Default redirect to home page instead of dashboard
-        router.push("/")
+        // Role-based redirect
+        if (user.role === "VENDOR") {
+          // Vendors go directly to their dashboard
+          router.push("/dashboard/vendor")
+        } else if (user.role === "ADMIN") {
+          // Admins go directly to their dashboard
+          router.push("/dashboard/admin")
+        } else {
+          // Customers go to the home page
+          router.push("/")
+        }
       }
     } catch (error) {
       toast({

@@ -13,6 +13,7 @@ import {
   Heart,
   BarChart3,
   Package2,
+  Plus,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -34,6 +35,12 @@ export function DashboardNav() {
       label: "Products",
       icon: Package,
       active: pathname === "/dashboard/vendor/products" || pathname.startsWith("/dashboard/vendor/products/"),
+    },
+    {
+      href: "/dashboard/vendor/products/new",
+      label: "Add Product",
+      icon: Plus,
+      active: pathname === "/dashboard/vendor/products/new",
     },
     {
       href: "/dashboard/vendor/orders",
@@ -151,13 +158,15 @@ export function DashboardNav() {
       <div className="flex h-full max-h-screen flex-col gap-2 p-4">
         <div className="flex-1 overflow-auto py-2">
           <div className="grid gap-1">
-            <Link
-              href="/"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted"
-            >
-              <Package2 className="h-4 w-4" />
-              Back to Store
-            </Link>
+            {user?.role !== "VENDOR" && (
+              <Link
+                href="/"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted"
+              >
+                <Package2 className="h-4 w-4" />
+                Back to Store
+              </Link>
+            )}
 
             <div className="my-2 h-px bg-muted-foreground/20"></div>
 

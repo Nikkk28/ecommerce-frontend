@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Package, ShoppingBag, Users, DollarSign, BarChart3, Plus, Home } from "lucide-react"
-import Link from "next/link"
+import { Package, ShoppingBag, Users, DollarSign, BarChart3, Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -51,13 +50,7 @@ export default function VendorDashboardPage() {
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-3xl font-bold">Vendor Dashboard</h1>
             <div className="flex gap-2">
-              <Link href="/">
-                <Button variant="outline" size="sm">
-                  <Home className="mr-2 h-4 w-4" />
-                  Store Home
-                </Button>
-              </Link>
-              <Button onClick={() => router.push("/dashboard/vendor/products/new")}>
+              <Button onClick={() => router.push("/dashboard/vendor/products/new")} className="bg-primary">
                 <Plus className="mr-2 h-4 w-4" />
                 Add Product
               </Button>
@@ -107,18 +100,55 @@ export default function VendorDashboardPage() {
             </Card>
           </div>
 
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Revenue Overview</CardTitle>
-              <CardDescription>Your revenue for the past 30 days</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[200px] flex items-center justify-center">
-                <BarChart3 className="h-16 w-16 text-muted-foreground" />
-                <span className="ml-4 text-muted-foreground">Revenue chart will appear here</span>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="grid gap-6 md:grid-cols-2 mb-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+                <CardDescription>Manage your store</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <Button
+                    variant="default"
+                    className="w-full justify-start"
+                    onClick={() => router.push("/dashboard/vendor/products/new")}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add New Product
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => router.push("/dashboard/vendor/orders")}
+                  >
+                    <ShoppingBag className="mr-2 h-4 w-4" />
+                    View Recent Orders
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => router.push("/dashboard/vendor/settings")}
+                  >
+                    <DollarSign className="mr-2 h-4 w-4" />
+                    Update Store Details
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Revenue Overview</CardTitle>
+                <CardDescription>Your revenue for the past 30 days</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[200px] flex items-center justify-center">
+                  <BarChart3 className="h-16 w-16 text-muted-foreground" />
+                  <span className="ml-4 text-muted-foreground">Revenue chart will appear here</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           <Tabs defaultValue="products">
             <TabsList>
@@ -126,6 +156,12 @@ export default function VendorDashboardPage() {
               <TabsTrigger value="orders">Recent Orders</TabsTrigger>
             </TabsList>
             <TabsContent value="products" className="mt-4">
+              <div className="flex justify-end mb-4">
+                <Button onClick={() => router.push("/dashboard/vendor/products/new")} size="sm">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Product
+                </Button>
+              </div>
               <VendorProductsTable />
             </TabsContent>
             <TabsContent value="orders" className="mt-4">

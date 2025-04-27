@@ -63,7 +63,50 @@ api.interceptors.response.use(
 
 // Auth API
 export const authAPI = {
-  login: (username: string, password: string) => api.post("/auth/login", { username, password }),
+  login: (username: string, password: string) => {
+    console.log("Login attempt for:", username)
+
+    // Add timeout to prevent long waiting times on network issues
+    return api
+      .post(
+        "/auth/login",
+        { username, password },
+        {
+          timeout: 10000, // 10 seconds timeout
+        },
+      )
+      .catch((error) => {
+        console.error("Login API error:", error)
+
+        // If in development mode and server is not available, simulate a successful response
+        if (process.env.NODE_ENV === "development" && axios.isAxiosError(error) && !error.response) {
+          console.log("Development mode: Simulating login response")
+
+          // Create mock user data based on username - ensure all required fields are present
+          const mockUser = {
+            id: "dev-user-id",
+            username: username,
+            firstName: username, // Use username as firstName for the mock
+            lastName: "User",
+            email: `${username}@example.com`,
+            role: "CUSTOMER",
+            createdAt: new Date().toISOString(),
+          }
+
+          // Return a mock successful response with properly structured data
+          return Promise.resolve({
+            data: {
+              token: "mock-jwt-token",
+              refreshToken: "mock-refresh-token",
+              user: mockUser,
+            },
+          })
+        }
+
+        // Otherwise, propagate the error
+        return Promise.reject(error)
+      })
+  },
   register: (userData: any) => {
     console.log("API register called with:", userData)
 

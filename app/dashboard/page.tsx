@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Package2, ShoppingBag, User, Settings, Store, Heart, BarChart3, Home } from "lucide-react"
+import { Package2, ShoppingBag, User, Settings, Store, Heart, Home } from "lucide-react"
 import { useAuth } from "@/context/auth-context"
 import { LoadingSpinner } from "@/components/loading-spinner"
 import { Button } from "@/components/ui/button"
@@ -22,8 +22,20 @@ export default function DashboardPage() {
       return
     }
 
+    // Redirect vendors to their specific dashboard
+    if (user?.role === "VENDOR") {
+      router.push("/dashboard/vendor")
+      return
+    }
+
+    // Redirect admins to their specific dashboard
+    if (user?.role === "ADMIN") {
+      router.push("/dashboard/admin")
+      return
+    }
+
     setIsLoading(false)
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router, user])
 
   if (isLoading) {
     return (
@@ -95,68 +107,6 @@ export default function DashboardPage() {
                       <Button variant="outline" className="w-full justify-start">
                         <Heart className="mr-2 h-4 w-4" />
                         My Wishlist
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {user?.role === "VENDOR" && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Vendor Dashboard</CardTitle>
-                  <CardDescription>Manage your products and orders</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <Link href="/dashboard/vendor">
-                      <Button variant="outline" className="w-full justify-start">
-                        <Store className="mr-2 h-4 w-4" />
-                        Vendor Overview
-                      </Button>
-                    </Link>
-                    <Link href="/dashboard/vendor/products">
-                      <Button variant="outline" className="w-full justify-start">
-                        <Package2 className="mr-2 h-4 w-4" />
-                        My Products
-                      </Button>
-                    </Link>
-                    <Link href="/dashboard/vendor/orders">
-                      <Button variant="outline" className="w-full justify-start">
-                        <ShoppingBag className="mr-2 h-4 w-4" />
-                        Orders
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {user?.role === "ADMIN" && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Admin Dashboard</CardTitle>
-                  <CardDescription>Manage the platform</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <Link href="/dashboard/admin">
-                      <Button variant="outline" className="w-full justify-start">
-                        <BarChart3 className="mr-2 h-4 w-4" />
-                        Admin Overview
-                      </Button>
-                    </Link>
-                    <Link href="/dashboard/admin/users">
-                      <Button variant="outline" className="w-full justify-start">
-                        <User className="mr-2 h-4 w-4" />
-                        Users
-                      </Button>
-                    </Link>
-                    <Link href="/dashboard/admin/vendors">
-                      <Button variant="outline" className="w-full justify-start">
-                        <Store className="mr-2 h-4 w-4" />
-                        Vendors
                       </Button>
                     </Link>
                   </div>
